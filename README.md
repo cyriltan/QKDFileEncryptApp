@@ -4,7 +4,7 @@ This code seeks to demonstrate how one can pull QKD keys from the Toshiba KMS em
 To run this code, you need to install the open quantum safe library that runs the PQC algorithms. You need to install the following:
 https://github.com/open-quantum-safe/liboqs-python
 
-Follow the instructions to liboqs. Run the following to use in standalone applications.
+Follow the instructions to install liboqs. Run the following to use in standalone applications. Note you need to modify the path below where you installed your liboqs.
 ```bash
 export PYTHONPATH=$PYTHONPATH:/path/to/liboqs-python
 ```
