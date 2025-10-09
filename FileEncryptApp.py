@@ -12,10 +12,9 @@ from cryptography.fernet import Fernet
 from requests.packages.urllib3.util.ssl_ import create_urllib3_context
 from pathlib import Path
 
-#url = 'https://nqsnplus-01:443/api/v1/keys/Sa4/enc_keys --tlsv1.3 --cacert /home/cyriltan/certificates/NQSNTestkeys/qkdserviceCacert.pem --cert /hom>
-
-#enc_url = 'https://nqsnplus-01:443/api/v1/keys/app02-nqsn.eval.ps.qkdn/enc_keys --tlsv1.3 --cacert /home/cyriltan/certificates/NQSNTestkeys/qkdserviceCacert.pem --cert /home/cyriltan/certificates/NQSNTestkeys/app01-nqsncert.pem --key /home/cyriltan/certificates/NQSNTestkeys/app01-nqsnkey.pem'
+# Please change the location of the certs
 enc_url = 'https://ec2-3-113-86-199.ap-northeast-1.compute.amazonaws.com/api/v1/keys/SA00000006/enc_keys --cacert /home/cyriltan/certificates/KMSEmulator/cacert.crt --cert /home/cyriltan/certificates/KMSEmulator/SA00000007.crt --key /home/cyriltan/certificates/KMSEmulator/SA00000007.key' 
+
 
 # Build the curl command
 curl_enc_command = f"curl -k {enc_url}"
@@ -26,7 +25,7 @@ def generate_key():
     with open("secret.key", "wb") as key_file:
         key_file.write(key)
 
-# Function to generate and save a Dilithium3 key pair
+# Function to generate and save a Dilithium3 key pair (also known as ML-DSA now)
 def generate_dilithium3_keypair():
     print("liboqs version:", oqs.oqs_version())
     print("liboqs-python version:", oqs.oqs_python_version())
@@ -63,12 +62,6 @@ def loadQKDkey():
     key_value = data['keys'][0]['key']
     key_id = data['keys'][0]['key_ID']
 
-#    The following codes are only needed if the encryption accepts raw keys. In this case, the Fernet function accepts base64 encoded keys
-#    padding_needed = len(key_value) % 4
-#    if padding_needed:
-#        key_value += '=' * (4 - padding_needed)
-#    decoded_key = base64.b64decode(key_value)
-#    return (decoded_key)
     return (key_value, key_id)
 
 # Function to decode the quantum key based on the key ID
@@ -80,6 +73,7 @@ def DecodeQKDkey(key_id):
         "--cert", "/home/cyriltan/certificates/KMSEmulator/SA00000006.crt",
         "--key", "/home/cyriltan/certificates/KMSEmulator/SA00000006.key"
     ]
+# Please change the location of the certs above.
 
 #    print(command)
     result = subprocess.run(command, capture_output=True, text=True)
@@ -292,7 +286,7 @@ def decrypt_folder():
 # Main application window
 def create_app():
     app = tk.Tk()
-    app.title("MAS File Encryptor/Decryptor Program")
+    app.title("QKD-based File Encryptor/Decryptor Program")
 
     # Button configurations
     button_width = 50  # Increased button width
